@@ -18,8 +18,8 @@ const Traits = z.array(Trait).max(3).optional();
 type TraitsType = z.infer<typeof Traits>;
 
 const Favorite = z.object({
-  category: z.string,
-  item: z.string,
+  category: z.string(),
+  item: z.string(),
 });
 const Favorites = z.array(Favorite).max(3).optional();
 type FavoritesType = z.infer<typeof Favorites>;
