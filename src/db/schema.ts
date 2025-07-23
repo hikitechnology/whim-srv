@@ -5,32 +5,37 @@ import {
   createSelectSchema,
   createUpdateSchema,
 } from "drizzle-zod";
+import z from "zod";
 
-type Interests = string[];
+const Interests = z.array(z.string()).max(10).optional();
+type InterestsType = z.infer<typeof Interests>;
 
-type Trait = {
-  trait: string;
-  description: string;
-};
-type Traits = [Trait?, Trait?, Trait?];
+const Trait = z.object({
+  trait: z.string(),
+  description: z.string(),
+});
+const Traits = z.array(Trait).max(3).optional();
+type TraitsType = z.infer<typeof Traits>;
 
-type Favorite = {
-  category: string;
-  item: string;
-};
-type Favorites = [Favorite?, Favorite?, Favorite?];
+const Favorite = z.object({
+  category: z.string,
+  item: z.string,
+});
+const Favorites = z.array(Favorite).max(3).optional();
+type FavoritesType = z.infer<typeof Favorites>;
 
-type ConversationStarters = [string?, string?, string?];
+const ConversationStarters = z.array(z.string()).max(3).optional();
+type ConversationStartersType = z.infer<typeof ConversationStarters>;
 
 export const usersTable = pgTable("users", {
   uid: text().primaryKey(),
   name: text().notNull(),
   bio: text(),
-  interests: jsonb().$type<Interests>(),
-  traits: jsonb().$type<Traits>(),
-  favorites: jsonb().$type<Favorites>(),
+  interests: jsonb().$type<InterestsType>(),
+  traits: jsonb().$type<TraitsType>(),
+  favorites: jsonb().$type<FavoritesType>(),
   lookingFor: text(),
-  conversationStarters: jsonb().$type<ConversationStarters>(),
+  conversationStarters: jsonb().$type<ConversationStartersType>(),
   showInterests: boolean().notNull().default(false),
   showTraits: boolean().notNull().default(false),
   showFavorites: boolean().notNull().default(false),
@@ -40,6 +45,22 @@ export const usersTable = pgTable("users", {
 
 export type User = InferSelectModel<typeof usersTable>;
 
-export const userSelectSchema = createSelectSchema(usersTable);
-export const userInsertSchema = createInsertSchema(usersTable);
-export const userUpdateSchema = createUpdateSchema(usersTable);
+const schemaRefinements = {
+  interests: Interests,
+  traits: Traits,
+  favorites: Favorites,
+  conversationStarters: ConversationStarters,
+};
+
+export const userSelectSchema = createSelectSchema(
+  usersTable,
+  schemaRefinements,
+);
+export const userInsertSchema = createInsertSchema(
+  usersTable,
+  schemaRefinements,
+);
+export const userUpdateSchema = createUpdateSchema(
+  usersTable,
+  schemaRefinements,
+);
