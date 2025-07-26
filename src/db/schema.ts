@@ -1,5 +1,12 @@
-import type { InferSelectModel } from "drizzle-orm";
-import { boolean, jsonb, pgTable, text } from "drizzle-orm/pg-core";
+import type { InferInsertModel, InferSelectModel } from "drizzle-orm";
+import {
+  boolean,
+  geometry,
+  jsonb,
+  pgTable,
+  text,
+  timestamp,
+} from "drizzle-orm/pg-core";
 import {
   createInsertSchema,
   createSelectSchema,
@@ -41,9 +48,12 @@ export const usersTable = pgTable("users", {
   showFavorites: boolean().notNull().default(false),
   showLookingFor: boolean().notNull().default(false),
   showConversationStarters: boolean().notNull().default(false),
+  location: geometry({ type: "point", mode: "xy" }),
+  locationUpdated: timestamp(),
 });
 
 export type User = InferSelectModel<typeof usersTable>;
+export type UserInsert = InferInsertModel<typeof usersTable>;
 
 const schemaRefinements = {
   interests: Interests,
