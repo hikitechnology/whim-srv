@@ -27,10 +27,6 @@ export async function updateUser(uid: string, params: UserQuery) {
   return db.update(usersTable).set(params).where(eq(usersTable.uid, uid));
 }
 
-export async function getAllUsers() {
-  return db.select().from(usersTable);
-}
-
 export async function updateLocation(
   uid: string,
   coords: { x: number; y: number },

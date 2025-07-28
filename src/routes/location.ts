@@ -9,6 +9,8 @@ type Connection = {
   uid: string;
   coordinates: string;
   distance: number;
+  name: string;
+  interests?: string[];
 };
 
 locationRoutes.post("/sync", auth, async (req, res) => {
@@ -26,6 +28,8 @@ locationRoutes.post("/sync", auth, async (req, res) => {
     uid: user.uid,
     coordinates: req.body,
     distance,
+    name: user.name,
+    interests: user.interests ?? undefined,
   }));
 
   res.send(usersToSend);
