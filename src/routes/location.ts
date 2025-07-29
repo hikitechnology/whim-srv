@@ -12,6 +12,7 @@ type Connection = {
   coordinates: string;
   distance: number;
   name: string;
+  pfpId?: string;
   interests?: string[];
 };
 
@@ -47,6 +48,7 @@ locationRoutes.post("/sync", auth, async (req, res) => {
       distance: distanceToSend,
       name: user.name,
       interests: user.interests ?? undefined,
+      pfpId: user.pfpId ?? undefined,
     };
   });
 

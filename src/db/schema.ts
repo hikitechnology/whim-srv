@@ -37,6 +37,7 @@ type ConversationStartersType = z.infer<typeof ConversationStarters>;
 export const usersTable = pgTable("users", {
   uid: text().primaryKey(),
   name: text().notNull(),
+  pfpId: text(),
   bio: text(),
   interests: jsonb().$type<InterestsType>(),
   traits: jsonb().$type<TraitsType>(),
