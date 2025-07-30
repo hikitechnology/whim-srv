@@ -5,7 +5,7 @@ import {
   DEFAULT_DISPLAY_NAME,
   LOCATION_EXPIRES_MINUTES,
 } from "../../constants";
-import { usersTable, type User } from "../schema";
+import { usersTable, type User } from "../schema/users";
 
 type UserQuery = Partial<Omit<User, "uid">>;
 

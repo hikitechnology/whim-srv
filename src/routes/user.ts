@@ -3,7 +3,7 @@ import { findUser, updateUser } from "../db/queries/user";
 import { auth } from "../middleware/auth";
 import HttpException from "../errors/HttpException";
 import { validateData } from "../middleware/validation";
-import { userUpdateSchema } from "../db/schema";
+import { userUpdateSchema } from "../db/schema/users";
 
 const userRoutes = Router();
 

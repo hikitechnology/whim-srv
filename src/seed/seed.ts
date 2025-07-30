@@ -1,5 +1,5 @@
 import { faker } from "@faker-js/faker";
-import { usersTable, type UserInsert } from "../db/schema";
+import { usersTable, type UserInsert } from "../db/schema/users";
 import { arrayOf } from "./utils";
 import { db } from "../db";
 

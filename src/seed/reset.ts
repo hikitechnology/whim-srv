@@ -1,5 +1,5 @@
 import { reset } from "drizzle-seed";
-import { usersTable } from "../db/schema";
+import { usersTable } from "../db/schema/users";
 import { db } from "../db";
 
 async function main() {
