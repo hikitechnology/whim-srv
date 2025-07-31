@@ -15,6 +15,14 @@ userRoutes.get("/:id", async (req: Request<{ id: string }>, res) => {
   res.send(userToSend);
 });
 
+userRoutes.get("/:id/basic", async (req: Request<{ id: string }>, res) => {
+  const id = req.params.id;
+  const user = await findUser(id);
+  if (!user) throw new HttpException(404);
+  const { name, pfpId } = user;
+  res.send({ name, pfpId });
+});
+
 userRoutes.patch(
   "/:id/update",
   auth,

@@ -11,7 +11,7 @@ export const messagesTable = pgTable("messages", {
     .notNull()
     .references(() => usersTable.uid),
   message: text().notNull(),
-  timestamp: timestamp().notNull().defaultNow(),
+  timestamp: timestamp({ withTimezone: true }).notNull().defaultNow(),
 });
 
 export type Message = InferSelectModel<typeof messagesTable>;
