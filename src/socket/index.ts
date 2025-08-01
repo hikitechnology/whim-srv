@@ -1,5 +1,5 @@
 import type { Server, Socket } from "socket.io";
-import type { ClientMessage, ReadEvent, TypingEvent } from "../types/message";
+import type { ClientMessage, TypingEvent } from "../types/message";
 import { saveMessage } from "../db/queries/messages";
 import { setTypingTimeout } from "../utils/messaging";
 

@@ -9,3 +9,4 @@ export const IMAGE_OUTPUT_DIR = "img/";
 export const ROOT_DIR = process.cwd() + "/";
 
 export const TYPING_TIMEOUT_MS = 5000;
+export const MESSAGE_PAGE_SIZE = 30;
