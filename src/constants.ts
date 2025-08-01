@@ -7,3 +7,5 @@ export const REFRESH_DISTANCE_IF_DECREASES_PAST_METERS = 5;
 
 export const IMAGE_OUTPUT_DIR = "img/";
 export const ROOT_DIR = process.cwd() + "/";
+
+export const TYPING_TIMEOUT_MS = 5000;
