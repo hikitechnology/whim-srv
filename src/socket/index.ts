@@ -1,43 +1,25 @@
-import type { Socket } from "socket.io";
-import type { ClientMessage, TypingEvent } from "../types/message";
+import type { Server, Socket } from "socket.io";
+import type { ClientMessage, ReadEvent, TypingEvent } from "../types/message";
 import { saveMessage } from "../db/queries/messages";
-import { TYPING_TIMEOUT_MS } from "../constants";
+import { setTypingTimeout } from "../utils/messaging";
 
-const typingTimeouts: {
-  sender: string;
-  receiver: string;
-  timeout: NodeJS.Timeout;
-}[] = [];
-
-const setTypingTimeout = (socket: Socket, sender: string, receiver: string) => {
-  const existingTimeout = typingTimeouts.findIndex(
-    (item) => item.sender === sender && item.receiver === receiver,
-  );
-  if (existingTimeout !== -1) {
-    clearTimeout(typingTimeouts[existingTimeout]!.timeout);
-    typingTimeouts.splice(existingTimeout, 1);
-  }
-
-  const timeout = setTimeout(() => {
-    socket.to(receiver).emit("typing-stop", { uid: sender });
-  }, TYPING_TIMEOUT_MS);
-
-  typingTimeouts.push({
-    sender,
-    receiver,
-    timeout,
-  });
-};
-
-const connectionHandler = (socket: Socket) => {
+export const connectionHandler = (io: Server) => (socket: Socket) => {
   console.log(`user connected to socket with id ${socket.uid}`);
 
-  socket.on("message", async (message: ClientMessage) => {
+  socket.on("message", async (sentMessage: ClientMessage) => {
+    const { message, receiver, clientId } = sentMessage;
     const savedMessage = await saveMessage({
-      ...message,
+      message,
+      receiver,
       sender: socket.uid,
     });
-    socket.to(message.receiver).emit("message", savedMessage);
+
+    io.to(receiver).emit("message", savedMessage);
+    io.to(socket.uid).emit("delivered", {
+      clientId,
+      id: savedMessage.id,
+      timestamp: savedMessage.timestamp,
+    });
   });
 
   socket.on("typing-start", async ({ uid }: TypingEvent) => {

@@ -32,7 +32,7 @@ app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
 });
 
 io.use(socketAuth);
-io.on("connection", connectionHandler);
+io.on("connection", connectionHandler(io));
 
 server.listen(PORT, () => {
   console.log(`Listening on ${PORT}`);
